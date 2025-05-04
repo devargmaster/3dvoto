@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+    container_name: 3dvoto_frontend
+    ports:
+      - "3002:80"
+    restart: always
