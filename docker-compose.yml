@@ -1,10 +1,40 @@
-version: '3.8'
+version: '3'
 
 services:
   frontend:
+    image: 3dvoto
+    container_name: 3dvoto
     build:
       context: ./frontend
-    container_name: 3dvoto_frontend
-    ports:
-      - "3002:80"
     restart: always
+    networks:
+      - web
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.3dvoto.rule=Host(`3dvoto.com.ar`, `www.3dvoto.com.ar`)"
+      - "traefik.http.routers.3dvoto.entrypoints=websecure"
+      - "traefik.http.routers.3dvoto.tls.certresolver=myresolver"
+
+  traefik:
+    image: traefik:v2.10
+    container_name: traefik
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik/letsencrypt:/letsencrypt
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=tu-email@tudominio.com"
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+
+networks:
+  web:
+    external: false
