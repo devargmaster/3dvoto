@@ -1,8 +1,14 @@
-# Dockerfile para producción con build hecho localmente
+FROM node:18-bullseye AS build
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
 FROM nginx:stable-alpine
-WORKDIR /usr/share/nginx/html
-
-COPY dist/ .
-
-# Configuración de Nginx
+COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
