@@ -5,7 +5,7 @@ services:
     image: 3dvoto
     container_name: 3dvoto
     build:
-      context: ./frontend
+      context: .
     restart: always
     networks:
       - web
