@@ -1,11 +1,25 @@
-version: '3'
+version: '3.8'          # podés borrar la línea si molestan los warnings
 
 services:
   frontend:
-    image: 3dvoto
-    container_name: 3dvoto
+    image: 3dvoto       # o usa build: .  si querés reconstruir cada vez
     build:
       context: .
-    ports:
-      - "80:80"
+    container_name: 3dvoto
+
+    # 🔴 Eliminamos el mapeo del host:
+    # ports:
+    #   - "80:80"
+
+    environment:
+      VIRTUAL_HOST: 3dvoto.com,www.3dvoto.com
+      LETSENCRYPT_HOST: 3dvoto.com,www.3dvoto.com
+      LETSENCRYPT_EMAIL: admin@3dvoto.com   # el mail que diste en acme‑companion
+
     restart: always
+    networks:
+      - proxy            # se conecta a la red del reverse‑proxy
+
+networks:
+  proxy:
+    external: true        # ya la creaste con  docker network create proxy
