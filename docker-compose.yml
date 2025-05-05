@@ -12,8 +12,8 @@ services:
     #   - "80:80"
 
     environment:
-      VIRTUAL_HOST: 3dvoto.com,www.3dvoto.com
-      LETSENCRYPT_HOST: 3dvoto.com,www.3dvoto.com
+      VIRTUAL_HOST: 3dvoto.com,www.3dvoto.com,3dvoto.com.ar,www.3dvoto.com.ar
+      LETSENCRYPT_HOST: 3dvoto.com,www.3dvoto.com,3dvoto.com.ar,www.3dvoto.com.ar
       LETSENCRYPT_EMAIL: admin@3dvoto.com   # el mail que diste en acme‑companion
 
     restart: always
